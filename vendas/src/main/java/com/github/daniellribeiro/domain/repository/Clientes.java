@@ -1,62 +1,59 @@
 package com.github.daniellribeiro.domain.repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.github.daniellribeiro.domain.entity.Cliente;
 
 @Repository
 public class Clientes {
-	private static String SELECT = "SELECT * FROM CLIENTE";
-
-	private static String INSERT = "INSERT INTO CLIENTE(NOME) VALUES (?)";
-
-	private static String UPDATE = "UPDATE CLIENTE SET NOME = (?) WHERE ID = (?)";
-
-	private static String DELETE = "DELETE FROM CLIENTE WHERE ID = (?)";
+//	@Autowired
+//	private JdbcTemplate jdbcTemplate;
+//	
+	private final String SELECT_NOME = "select c from Cliente c where c.nome like :nome";
 
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private EntityManager entityManager;
 
-	public void deletar(Integer id) {
-		jdbcTemplate.update(DELETE, new Object[] { id });
+	@Transactional
+	public void deletar(Cliente cliente) {
+		if(!entityManager.contains(cliente))
+			cliente = entityManager.merge(cliente);
+		
+		entityManager.remove(cliente);
 	}
 
-	public void atualizar(String nome, Integer id) {
-		jdbcTemplate.update(UPDATE, new Object[] { nome, id });
+	@Transactional
+	public void atualizar(Cliente cliente) {
+		entityManager.merge(cliente);
 	}
 
+	@Transactional
 	public void salvar(Cliente cliente) {
-		jdbcTemplate.update(INSERT, new Object[] { cliente.getNome() });
+		entityManager.persist(cliente);
 	}
 
+	@Transactional(readOnly = true)
 	public List<Cliente> buscarTodos() {
-		return jdbcTemplate.query(SELECT, obterClienteMapper());
+		return entityManager.createQuery("from Cliente", Cliente.class).getResultList();
 	}
 
-	public List<Cliente> buscarClientePorId(Integer id) {
-		return jdbcTemplate.query(SELECT.concat(" WHERE id = (?)"), new Object[] { id }, obterClienteMapper());
+	@Transactional(readOnly = true)
+	public Cliente buscarClientePorId(Integer id) {
+		return entityManager.find(Cliente.class, id);
 
 	}
 
+	@Transactional(readOnly = true)
 	public List<Cliente> buscarClientePorNome(String nome) {
-		return jdbcTemplate.query(SELECT.concat(" WHERE nome like (?)"), new Object[] { "%" + nome + "%" },
-				obterClienteMapper());
+		TypedQuery<Cliente> query = entityManager.createQuery(SELECT_NOME, Cliente.class);
+		query.setParameter("nome", "%" + nome + "%");
+		return query.getResultList();
 	}
-
-	public RowMapper<Cliente> obterClienteMapper() {
-		return new RowMapper<Cliente>() {
-			@Override
-			public Cliente mapRow(ResultSet resultSet, int i) throws SQLException {
-				return new Cliente(resultSet.getInt("id"), resultSet.getString("nome"));
-			};
-		};
-	}
-
 }

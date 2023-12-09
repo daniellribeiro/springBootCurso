@@ -1,7 +1,17 @@
 package com.github.daniellribeiro.domain.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Cliente {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	
 	private String nome;
 	
 	public Integer getId() {
@@ -24,6 +34,10 @@ public class Cliente {
 	public Cliente(Integer id, String nome) {
 		this.id = id;
 		this.nome = nome;
+	}
+	
+	public Cliente() {
+		
 	}
 	
 	@Override

@@ -27,22 +27,28 @@ public class VendasAplicacao {
 			clientes.salvar(new Cliente("Teste"));
 			clientes.salvar(new Cliente("Gabriel"));
 			clientes.salvar(new Cliente("Matheus"));
+		    
+			Cliente clienteAtualizar = clientes.buscarClientePorId(2);
 			
-			clientes.atualizar("Teste",2);
+			clienteAtualizar.setNome("Teste2");
 			
-			clientes.deletar(4);
+			clientes.atualizar(clienteAtualizar);
 			
-			clientes.buscarClientePorId(1).forEach(System.out::println);
+			
+			
+			clientes.deletar(clientes.buscarClientePorId(4));
+			
+			
 
 			clientes.buscarClientePorNome("Matheu").forEach(System.out::println);
 			
 			System.out.println("TODOS:");
 			clientes.buscarTodos().forEach(System.out::println);
 			
-			clientes.deletar(1);
-			clientes.deletar(2);
-			clientes.deletar(3);
-			clientes.deletar(5);
+			clientes.deletar(clientes.buscarClientePorId(1));
+			clientes.deletar(clientes.buscarClientePorId(2));
+			clientes.deletar(clientes.buscarClientePorId(3));
+			clientes.deletar(clientes.buscarClientePorId(5));
 			
 			System.out.println(clientes.buscarTodos().isEmpty() ? "Vazio" : "Tem valor");
 		};
