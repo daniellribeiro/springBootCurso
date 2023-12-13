@@ -1,9 +1,12 @@
 package com.github.daniellribeiro.domain.entity;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Cliente {
@@ -14,6 +17,15 @@ public class Cliente {
 	
 	private String nome;
 	
+	@OneToMany(mappedBy = "cliente")
+	private Set<Pedido> pedidos;
+	
+	public Set<Pedido> getPedidos() {
+		return pedidos;
+	}
+	public void setPedidos(Set<Pedido> pedidos) {
+		this.pedidos = pedidos;
+	}
 	public Integer getId() {
 		return id;
 	}

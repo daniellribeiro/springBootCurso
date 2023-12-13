@@ -1,9 +1,19 @@
 package com.github.daniellribeiro.domain.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Produto {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
+	
 	private String descricao;
-	private double preco_unitario;
+	
+	private double preco;
 	
 	public Integer getId() {
 		return id;
@@ -17,11 +27,11 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public double getPreco_unitario() {
-		return preco_unitario;
+	public double getPreco() {
+		return preco;
 	}
-	public void setPreco_unitario(double preco_unitario) {
-		this.preco_unitario = preco_unitario;
+	public void setPreco_unitario(double preco) {
+		this.preco = preco;
 	}
 	
 	

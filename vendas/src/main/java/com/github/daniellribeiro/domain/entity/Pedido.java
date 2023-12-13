@@ -2,12 +2,34 @@ package com.github.daniellribeiro.domain.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
 public class Pedido {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	private Cliente cliente_id;
+	
+	@ManyToOne
+	@JoinColumn(name="CLIENTE")
+	private Cliente cliente;
+   
 	private LocalDate dataPedido;
+	
+	@Column(precision = 20, scale = 2)
 	private BigDecimal total;
+	
+	@OneToMany(mappedBy = "pedido")
+	private Set<ItemPedido> itens;
 	
 	public LocalDate getDataPedido() {
 		return dataPedido;
@@ -28,10 +50,20 @@ public class Pedido {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	public Cliente getCliente_id() {
-		return cliente_id;
+	public Cliente getCliente() {
+		return cliente;
 	}
-	public void setCliente_id(Cliente cliente_id) {
-		this.cliente_id = cliente_id;
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	
+	@Override
+	public String toString() {
+		return "Pedido{" +
+			   "id=" + id +
+			   ", cliente=" + cliente +
+			   ", dataPedido='" + dataPedido +
+			   ", total='" + total +
+			   '}';
 	}
 }
