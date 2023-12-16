@@ -17,6 +17,8 @@ public class Cliente {
 	
 	private String nome;
 	
+	private String imagem;
+	
 	@OneToMany(mappedBy = "cliente")
 	private Set<Pedido> pedidos;
 	
@@ -58,5 +60,11 @@ public class Cliente {
 			   "id=" + id +
 			   ", nome='" + nome + '\'' +
 			   '}';
+	}
+	public String getImagem() {
+		return imagem;
+	}
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
 	}
 }

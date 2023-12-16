@@ -9,7 +9,7 @@
 </head>
 
 <body>
-	<script src="menu.js" type="text/javascript"></script>
+	<script src="metodos.js" type="text/javascript"></script>
 
 	<h1 id="lblh1">Produtos</h1>
 
@@ -30,36 +30,41 @@
 
 	<br>
 
+	<div class="form-floating">
+		<input style="display:none" type="text" class="form-control" id="floatingImage">
+		<label style="display:none" for="floatingImage" id="lblImage">Link da imagem</label>
+	</div>
+
+	<div class="form-floating">
+		<a style="display:none" id="visualizarFoto"
+			class="link-offset-2 link-underline link-underline-opacity-0">VISUALIZAR FOTO PRODUTO</a>
+	</div>
+
+	<br>
+
 	<button class="btn btn-success" id="btnBuscar" onclick="buscarProduto()" type="button">BUSCAR</button>
 
 	<button class="btn btn-warning" id="btnTelaCadastrar" onclick="exibirTelaCadastrar()"
 		type="button">CADASTRAR</button>
 
+	<button onclick="atualizarImagem()" class="btn btn-warning" id="btnEnviarAlteracaoImagem"
+		style="display:none">ENVIAR</button>
+
 	<button onclick="cadastrar()" id="btnEnviarCadastro" type="submit" class="btn btn-warning"
 		style="display:none">ENVIAR</button>
 
-	<button onclick="alterarCliente()" id="btnEnviarAlteracao" type="submit" class="btn btn-warning"
+	<button onclick="alterar()" id="btnEnviarAlteracao" type="submit" class="btn btn-warning"
 		style="display:none">ENVIAR</button>
 
-	<button onclick="exibirTelaAlterarCliente()" id="btnTelaAlterarCadastro" class="btn btn-info"
+	<button onclick="exibirTelaAlterar()" id="btnTelaAlterarCadastro" class="btn btn-info"
 		style="display:none">ALTERAR</button>
 
-	<button onclick="deletarCliente()" id="btnTelaDeletar" class="btn btn-danger" style="display:none">DELETAR</button>
+	<button onclick="deletar()" id="btnTelaDeletar" class="btn btn-danger" style="display:none">DELETAR</button>
+
+	<button onclick="alterarImagem()" id="btnAlterarImagem" class="btn btn-info" style="display:none">ALTERAR
+		IMAGEM</button>
 </body>
 <script>
-	function desabilitarTodosOsBotoes() {
-		document.getElementById("btnBuscar").style.display = "none";
-
-		document.getElementById("btnTelaCadastrar").style.display = "none";
-
-		document.getElementById("btnEnviarCadastro").style.display = "none";
-
-		document.getElementById("btnEnviarAlteracao").style.display = "none";
-
-		document.getElementById("btnTelaAlterarCadastro").style.display = "none";
-
-		document.getElementById("btnTelaDeletar").style.display = "none";
-	}
 
 	function exibicaoPadraoBusca() {
 		desabilitarTodosOsBotoes();
@@ -73,6 +78,16 @@
 		document.getElementById("floatingDescricao").disabled = true;
 
 		document.getElementById("floatingPreco").disabled = true;
+
+		document.getElementById("visualizarFoto").style.display = "none";
+
+		document.getElementById("lblh1").textContent = "Produtos";
+
+		document.getElementById("visualizarFoto").style.display = "none";
+
+		document.getElementById("floatingImage").style.display = "none";
+
+		document.getElementById("lblImage").style.display = "none";
 	}
 
 	function limparCampos() {
@@ -96,6 +111,7 @@
 				} else {
 					document.getElementById("btnTelaAlterarCadastro").style.display = "inline";
 					document.getElementById("btnTelaDeletar").style.display = "inline";
+					document.getElementById("btnAlterarImagem").style.display = "inline";
 					return response.json();
 				}
 			})
@@ -103,6 +119,12 @@
 				document.getElementById("floatingDescricao").value = data.descricao;
 
 				document.getElementById("floatingPreco").value = data.preco.toFixed(2);
+				
+				if (data.imagem != null) {
+					document.getElementById("visualizarFoto").style.display = "inline";
+					document.getElementById("visualizarFoto").href = data.imagem;
+					document.getElementById("visualizarFoto").target = "_blank";
+				}
 			});
 
 	}
@@ -132,10 +154,13 @@
 		const url = "api/produtos";
 		const requestOptions = {
 			method: "POST",
-			body: {
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
 				descricao: document.getElementById("floatingDescricao").value,
 				preco: document.getElementById("floatingPreco").value
-			}
+			})
 		};
 
 		fetch(url, requestOptions)
@@ -153,25 +178,32 @@
 		;
 	}
 
-	function exibirTelaAlterarCliente() {
+	function exibirTelaAlterar() {
 		desabilitarTodosOsBotoes();
 
 		document.getElementById("floatingInput").disabled = true;
 
 		document.getElementById("floatingDescricao").disabled = false;
 
-		document.getElementById("lblh1").textContent = "Alterar Cliente";
+		document.getElementById("floatingPreco").disabled = false;
+
+		document.getElementById("lblh1").textContent = "Alterar Produto";
 
 		document.getElementById("btnEnviarAlteracao").style.display = "inline";
 
 	}
 
-	function alterarCliente() {
-		const url = "api/clientes/" + document.getElementById("floatingInput").value;
+	function alterar() {
+		const url = "api/produtos/" + document.getElementById("floatingInput").value;
 		const requestOptions = {
 			method: "PUT",
-			body:
-				document.getElementById("floatingDescricao").value
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				descricao: document.getElementById("floatingDescricao").value,
+				preco: document.getElementById("floatingPreco").value
+			})
 		};
 
 		fetch(url, requestOptions)
@@ -180,32 +212,74 @@
 			}
 			)
 			.then((data) => {
-				alert("Cliente alterado com sucesso");
+				alert("Produto alterado com sucesso");
 				document.getElementById("floatingInput").value = data.id;
 				desabilitarTodosOsBotoes();
-				buscarCliente();
+				buscarProduto();
 			});
 
 
 	}
 
-	function deletarCliente() {
+	function deletar() {
 
-		if (confirm("Tem certeza de que deseja excluir este cliente ?")) {
-			const url = "api/clientes/" + document.getElementById("floatingInput").value;
+		if (confirm("Tem certeza de que deseja excluir este produto ?")) {
+			const url = "api/produtos/" + document.getElementById("floatingInput").value;
 			const requestOptions = {
 				method: "DELETE"
 			};
 
 			fetch(url, requestOptions)
 
-			alert("Cliente excluido com sucesso");
+			alert("Produto excluido com sucesso");
 
 			exibicaoPadraoBusca();
 
 			limparCampos();
 		}
 
+	}
+
+	function alterarImagem() {
+		desabilitarTodosOsBotoes();
+
+		document.getElementById("visualizarFoto").style.display = "none";
+
+		document.getElementById("floatingInput").disabled = true;
+
+		document.getElementById("floatingDescricao").disabled = true;
+
+		document.getElementById("floatingPreco").disabled = true;
+
+		document.getElementById("btnEnviarAlteracaoImagem").style.display = "inline";
+
+		document.getElementById("lblh1").textContent = "Alterar Imagem Produto";
+
+		document.getElementById("floatingImage").style.display = "inline";
+
+		document.getElementById("lblImage").style.display = "inline";
+
+	}
+
+	function atualizarImagem() {
+		const url = "api/produtos/imagem/" + document.getElementById("floatingInput").value;
+		const requestOptions = {
+			method: "PUT",
+			body:
+				document.getElementById("floatingImage").value
+		};
+
+		fetch(url, requestOptions)
+			.then((response) => {
+				return response.json();
+			}
+			)
+			.then((data) => {
+				alert("Imagem alterada com sucesso");
+				document.getElementById("floatingInput").value = data.id;
+				desabilitarTodosOsBotoes();
+				buscarProduto();
+			});
 	}
 
 </script>

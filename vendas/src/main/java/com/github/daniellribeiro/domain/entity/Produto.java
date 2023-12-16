@@ -1,5 +1,7 @@
 package com.github.daniellribeiro.domain.entity;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,7 +15,9 @@ public class Produto {
 	
 	private String descricao;
 	
-	private double preco;
+	private BigDecimal preco;
+	
+	private String imagem;
 	
 	public Integer getId() {
 		return id;
@@ -27,11 +31,17 @@ public class Produto {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	public double getPreco() {
+	public BigDecimal getPreco() {
 		return preco;
 	}
-	public void setPreco_unitario(double preco) {
+	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
+	}
+	public String getImagem() {
+		return imagem;
+	}
+	public void setImagem(String imagem) {
+		this.imagem = imagem;
 	}
 	
 	
