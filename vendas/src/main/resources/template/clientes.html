@@ -13,8 +13,22 @@
 
 	<h1 id="lblh1">Clientes</h1>
 
+	<input onclick="ativarCampos()" checked="true" type="radio" id="rbBuscarId" name="rbOpcoes"><label
+		id="lblBuscarId">BUSCAR POR ID</label>
+	<br>
+	<input onclick="ativarCampos()" type="radio" id="rbBuscarNome" name="rbOpcoes"><label id="lblBuscarNome">BUSCAR POR
+		NOME</label>
+	<br>
+	<input onclick="ativarCampos()" type="radio" id="rbCadastrar" name="rbOpcoes"><label
+		id="lblCadastrar">CADASTRAR</label>
+	<br>
+	<input disabled="true" onclick="ativarCampos()" type="radio" id="rbAlterar" name="rbOpcoes"><label
+		id="lblAlterar">ALTERAR</label>
+	<br>
+	<input onclick="ativarCampos()" type="radio" id="rbDeletar" name="rbOpcoes"><label id="lblDeletar">DELETAR</label>
+
 	<div class="form-floating mb-3">
-		<input type="text" class="form-control" id="floatingInput" placeholder="Id">
+		<input type="number" class="form-control" id="floatingInput" placeholder="Id">
 		<label for="floatingInput">Id</label>
 	</div>
 
@@ -26,88 +40,100 @@
 	<br>
 
 	<div class="form-floating">
-		<input style="display:none" type="text" class="form-control" id="floatingImage">
-		<label style="display:none" for="floatingImage" id="lblImage">Link da imagem</label>
+		<input disabled="true" type="text" class="form-control" id="floatingCpf" placeholder="CPF">
+		<label for="floatingCpf">CPF</label>
 	</div>
+
+	<br>
 
 	<div class="form-floating">
-		<a style="display:none" id="visualizarFoto"
-			class="link-offset-2 link-underline link-underline-opacity-0">VISUALIZAR FOTO PERFIL</a>
+		<input disabled="true" type="text" class="form-control" id="floatingImage">
+		<label for="floatingImage" id="lblImage">Link da imagem</label>
 	</div>
 
 	<br>
 
-	<button class="btn btn-success" id="btnBuscar" onclick="buscarCliente()" type="button">BUSCAR</button>
+	<div class="form-floating">
+		<a id="visualizarFoto" class="link-offset-2 link-underline link-underline-opacity-0">VISUALIZAR FOTO PERFIL</a>
+	</div>
 
-	<button class="btn btn-warning" id="btnTelaCadastrar" onclick="exibirTelaCadastrarCliente()"
-		type="button">CADASTRAR</button>
-
-	<button onclick="atualizarImagem()" class="btn btn-warning" id="btnEnviarAlteracaoImagem"
-		style="display:none">ENVIAR</button>
-
-	<button onclick="cadastrarCliente()" id="btnEnviarCadastro" type="submit" class="btn btn-warning"
-		style="display:none">ENVIAR</button>
-
-	<button onclick="alterarCliente()" id="btnEnviarAlteracao" type="submit" class="btn btn-warning"
-		style="display:none">ENVIAR</button>
-
-	<button onclick="exibirTelaAlterarCliente()" id="btnTelaAlterarCadastro" class="btn btn-info"
-		style="display:none">ALTERAR</button>
-
-	<button onclick="deletarCliente()" id="btnTelaDeletar" class="btn btn-danger" style="display:none">DELETAR</button>
-
-	<button onclick="alterarImagem()" id="btnAlterarImagem" class="btn btn-info" style="display:none">ALTERAR
-		IMAGEM</button>
 	<br>
+
+	<button class="btn btn-success" id="btnExecutarAcao" onclick="executarAcao()" type="button">ENVIAR ACAO</button>
+
 	<br>
 
 </body>
 <script>
-	
-function exibicaoPadraoBusca() {
-	desabilitarTodosOsBotoes();
+	function ativarCampos() {
 
-	document.getElementById("btnBuscar").style.display = "inline";
+		document.getElementById("floatingInput").disabled = true;
 
-	document.getElementById("btnTelaCadastrar").style.display = "inline";
+		document.getElementById("floatingNome").disabled = true;
 
-	document.getElementById("floatingInput").disabled = false;
+		document.getElementById("floatingCpf").disabled = true;
 
-	document.getElementById("floatingNome").disabled = true;
+		document.getElementById("floatingImage").disabled = true;
 
-	document.getElementById("floatingImage").style.display = "none";
+		document.getElementById("rbAlterar").disabled = true;
 
-	document.getElementById("lblImage").style.display = "none";
-
-	document.getElementById("lblh1").textContent = "Clientes";
-
-	document.getElementById("visualizarFoto").style.display = "none";
-}
-
-	function limparCampos() {
-		document.getElementById("floatingInput").value = "";
-
-		document.getElementById("floatingNome").value = "";
+		if (document.getElementById("rbBuscarId").checked) {
+			limparCampos();
+			document.getElementById("floatingInput").disabled = false;
+		} else if (document.getElementById("rbBuscarNome").checked) {
+			limparCampos();
+			document.getElementById("floatingNome").disabled = false;
+		} else if (document.getElementById("rbCadastrar").checked) {
+			limparCampos();
+			document.getElementById("floatingNome").disabled = false;
+			document.getElementById("floatingImage").disabled = false;
+			document.getElementById("floatingCpf").disabled = false;
+		}
+		else if (document.getElementById("rbAlterar").checked) {
+			document.getElementById("rbAlterar").disabled = false;
+			document.getElementById("floatingInput").disabled = true;
+			document.getElementById("floatingNome").disabled = false;
+			document.getElementById("floatingImage").disabled = false;
+			document.getElementById("floatingCpf").disabled = false;
+		}
+		else if (document.getElementById("rbDeletar").checked) {
+			document.getElementById("floatingInput").disabled = false;
+		}
 	}
 
+	function executarAcao() {
+		document.getElementById("visualizarFoto").style.display = "none";
 
-	function buscarCliente() {
-		exibicaoPadraoBusca();
+		if (document.getElementById("rbBuscarId").checked) {
+			buscarPorId();
+		} else if (document.getElementById("rbBuscarNome").checked) {
+			buscarPorNome();
+		} else if (document.getElementById("rbCadastrar").checked) {
+			cadastrarCliente();
+		} else if (document.getElementById("rbAlterar").checked) {
+			alterarCliente();
+		} else if (document.getElementById("rbDeletar").checked) {
+			deletarCliente();
+		}
+	}
 
+	function buscarPorId() {
 		fetch('api/clientes/' + document.getElementById("floatingInput").value)
 			.then((response) => {
+
 				if (response.status != 200) {
-					document.getElementById("floatingNome").value = "";
+					limparCampos();
 					alert("Cliente nao localizado")
 				} else {
-					document.getElementById("btnTelaAlterarCadastro").style.display = "inline";
-					document.getElementById("btnTelaDeletar").style.display = "inline";
-					document.getElementById("btnAlterarImagem").style.display = "inline";
+					document.getElementById("rbAlterar").disabled = false;
 					return response.json();
 				}
 			})
 			.then((data) => {
 				document.getElementById("floatingNome").value = data.nome;
+				document.getElementById("floatingImage").value = data.imagem;
+				document.getElementById("floatingCpf").value = data.cpf;
+
 				if (data.imagem != null) {
 					document.getElementById("visualizarFoto").style.display = "inline";
 					document.getElementById("visualizarFoto").href = data.imagem;
@@ -115,37 +141,43 @@ function exibicaoPadraoBusca() {
 				}
 			}
 			);
-
 	}
 
-
-	function exibirTelaCadastrarCliente() {
-		desabilitarTodosOsBotoes();
-
-		limparCampos();
-
-		document.getElementById("floatingInput").disabled = true;
-
-		document.getElementById("floatingInput").value = "";
-
-		document.getElementById("floatingNome").disabled = false;
-
-		document.getElementById("lblh1").textContent = "Cadastrar Cliente";
-
-		document.getElementById("btnEnviarCadastro").style.display = "inline";
-
-		document.getElementById("visualizarFoto").style.display = "none";
+	function buscarPorNome() {
+		fetch('api/clientes/nome/' + document.getElementById("floatingNome").value)
+			.then((response) => {
+				if (response.status == 400) {
+					limparCampos();
+					alert("Mais de um cliente possui esse nome, favor buscar pelo id");
+				}
+				else if (response.status != 200) {
+					limparCampos();
+					alert("Cliente nao localizado")
+				} else {
+					document.getElementById("rbAlterar").disabled = false;
+					return response.json();
+				}
+			})
+			.then((data) => {
+				document.getElementById("floatingInput").value = data.id;
+				buscarPorId();
+			});
 	}
 
 	function cadastrarCliente() {
-
 		const url = "api/clientes";
 		const requestOptions = {
 			method: "POST",
-			body:
-				document.getElementById("floatingNome").value
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				nome: document.getElementById("floatingNome").value,
+				cpf: document.getElementById("floatingCpf").value,
+				imagem: document.getElementById("floatingImage").value
+			})
 		};
-		console.log();
+		
 		fetch(url, requestOptions)
 			.then((response) => {
 				return response.json();
@@ -153,34 +185,31 @@ function exibicaoPadraoBusca() {
 			)
 			.then((data) => {
 				alert("Cliente cadastrado com sucesso")
-				document.getElementById("floatingInput").value = data.id
-				desabilitarTodosOsBotoes();
-				buscarCliente();
+
+				document.getElementById("floatingInput").value = data.id;
+				document.getElementById("floatingNome").value = data.nome;
+				document.getElementById("floatingCpf").value = data.cpf;
+				document.getElementById("floatingImage").value = data.imagem;
 			});
 
-		;
 	}
-
-	function exibirTelaAlterarCliente() {
-		desabilitarTodosOsBotoes();
-
-		document.getElementById("floatingInput").disabled = true;
-
-		document.getElementById("floatingNome").disabled = false;
-
-		document.getElementById("lblh1").textContent = "Alterar Cliente";
-
-		document.getElementById("btnEnviarAlteracao").style.display = "inline";
-
-		document.getElementById("visualizarFoto").style.display = "none";
-	}
-
 	function alterarCliente() {
+		if (document.getElementById("floatingInput").value === "") {
+			alert("Favor digitar o id do cliente que sera alterado");
+			return;
+		}
+
 		const url = "api/clientes/" + document.getElementById("floatingInput").value;
 		const requestOptions = {
 			method: "PUT",
-			body:
-				document.getElementById("floatingNome").value
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({
+				nome: document.getElementById("floatingNome").value,
+				cpf: document.getElementById("floatingCpf").value,
+				imagem: document.getElementById("floatingImage").value
+			})
 		};
 
 		fetch(url, requestOptions)
@@ -190,13 +219,18 @@ function exibicaoPadraoBusca() {
 			)
 			.then((data) => {
 				alert("Cliente alterado com sucesso");
+
 				document.getElementById("floatingInput").value = data.id;
-				desabilitarTodosOsBotoes();
-				buscarCliente();
+				buscarPorId();
 			});
+
 	}
 
 	function deletarCliente() {
+		if (document.getElementById("floatingInput").value === "") {
+			alert("Favor digitar o id do cliente que sera alterado");
+			return;
+		}
 
 		if (confirm("Tem certeza de que deseja excluir este cliente ?")) {
 			const url = "api/clientes/" + document.getElementById("floatingInput").value;
@@ -208,51 +242,9 @@ function exibicaoPadraoBusca() {
 
 			alert("Cliente excluido com sucesso");
 
-			exibicaoPadraoBusca();
-
 			limparCampos();
 		}
 
-	}
-
-	function alterarImagem() {
-		desabilitarTodosOsBotoes();
-
-		document.getElementById("visualizarFoto").style.display = "none";
-
-		document.getElementById("floatingInput").disabled = true;
-
-		document.getElementById("floatingNome").disabled = true;
-
-		document.getElementById("btnEnviarAlteracaoImagem").style.display = "inline";
-
-		document.getElementById("lblh1").textContent = "Alterar Imagem Cliente";
-		
-		document.getElementById("floatingImage").style.display = "inline";
-
-		document.getElementById("lblImage").style.display = "inline";
-
-	}
-
-	function atualizarImagem() {
-		const url = "api/clientes/imagem/" + document.getElementById("floatingInput").value;
-		const requestOptions = {
-			method: "PUT",
-			body:
-				document.getElementById("floatingImage").value
-		};
-
-		fetch(url, requestOptions)
-			.then((response) => {
-				return response.json();
-			}
-			)
-			.then((data) => {
-				alert("Imagem alterada com sucesso");
-				document.getElementById("floatingInput").value = data.id;
-				desabilitarTodosOsBotoes();
-				buscarCliente();
-			});
 	}
 
 </script>

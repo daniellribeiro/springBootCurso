@@ -19,6 +19,8 @@ public class Cliente {
 	
 	private String imagem;
 	
+	private String cpf;
+	
 	@OneToMany(mappedBy = "cliente")
 	private Set<Pedido> pedidos;
 	
@@ -66,5 +68,11 @@ public class Cliente {
 	}
 	public void setImagem(String imagem) {
 		this.imagem = imagem;
+	}
+	public String getCpf() {
+		return cpf;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 }

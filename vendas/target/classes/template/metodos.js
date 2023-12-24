@@ -4,8 +4,6 @@ criarBotao("clientes", "clientes.html");
 
 criarBotao("produtos", "produtos.html");
 
-criarBotao("pedidos", "pedidos.html");
-
 function criarBotao(nomeBotao, nomeHtmlTela) {
 	let botao = document.createElement("button");
 
@@ -26,18 +24,11 @@ function criarBotao(nomeBotao, nomeHtmlTela) {
 	botao.style.backgroundColor = "#ADD8E6";
 }
 
-function desabilitarTodosOsBotoes() {
-	document.getElementById("btnBuscar").style.display = "none";
 
-	document.getElementById("btnTelaCadastrar").style.display = "none";
+function limparCampos() {
+	var inputs = document.getElementsByTagName('input');
 
-	document.getElementById("btnEnviarCadastro").style.display = "none";
-
-	document.getElementById("btnEnviarAlteracao").style.display = "none";
-
-	document.getElementById("btnTelaAlterarCadastro").style.display = "none";
-
-	document.getElementById("btnTelaDeletar").style.display = "none";
-
-	document.getElementById("btnAlterarImagem").style.display = "none";
+	for (var i = 0; i < inputs.length; i++) {
+		inputs[i].value = '';
+	}
 }

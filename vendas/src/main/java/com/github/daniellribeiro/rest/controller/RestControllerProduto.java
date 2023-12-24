@@ -69,6 +69,8 @@ public class RestControllerProduto {
         BigDecimal precoAredondado = precoBigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
         produto.setPreco(precoAredondado);
         
+        produto.setImagem(produtos.findById(id).get().getImagem());
+        
 		Produto produtoSalvo = produtos.save(produto);
 		return ResponseEntity.ok(produtoSalvo);
 	}
