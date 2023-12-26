@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,11 +14,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.github.daniellribeiro.domain.entity.Cliente;
 import com.github.daniellribeiro.domain.repository.Clientes;
 
-@Controller
+@RestController
 @RequestMapping("/api/clientes")
 public class RestControllerCliente {
 	@Value("${upload.dir.clientes}")
@@ -32,7 +32,6 @@ public class RestControllerCliente {
 	}
 
 	@GetMapping(value = "/{id}")
-	@ResponseBody
 	public ResponseEntity getClienteById(@PathVariable Integer id) {
 		Optional<Cliente> cliente = clientes.findById(id);
 		if (cliente.isPresent())
@@ -42,7 +41,6 @@ public class RestControllerCliente {
 	}
 
 	@GetMapping(value = "nome/{nome}")
-	@ResponseBody
 	public ResponseEntity getClienteByNome(@PathVariable String nome) {
 		List<Cliente> listaClientes = clientes.encontrarPorNome(nome);
 
@@ -59,7 +57,6 @@ public class RestControllerCliente {
 	}
 
 	@PostMapping
-	@ResponseBody
 	public ResponseEntity salvarCliente(@RequestBody Map<String, String> requestBody) {
 		String nome = requestBody.get("nome");
 		String cpf = requestBody.get("cpf");
@@ -76,13 +73,11 @@ public class RestControllerCliente {
 	}
 
 	@DeleteMapping(value = "/{id}")
-	@ResponseBody
 	public void deletarCliente(@PathVariable Integer id) {
 		clientes.deleteById(id);
 	}
 
 	@PutMapping(value = "/{id}")
-	@ResponseBody
 	public ResponseEntity atualizarCliente(@PathVariable Integer id, @RequestBody Map<String, String> requestBody) {
 		String nome = requestBody.get("nome");
 		String cpf = requestBody.get("cpf");
