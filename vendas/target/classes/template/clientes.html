@@ -47,14 +47,14 @@
 	<br>
 
 	<div class="form-floating">
-		<input disabled="true" type="text" class="form-control" id="floatingImage">
-		<label for="floatingImage" id="lblImage">Link da imagem</label>
+		<input style="display:none" disabled="true" type="text" class="form-control" id="floatingImage">
+		<label style="display:none" for="floatingImage" id="lblImage">Link da imagem</label>
 	</div>
 
 	<br>
 
 	<div class="form-floating">
-		<a id="visualizarFoto" class="link-offset-2 link-underline link-underline-opacity-0">VISUALIZAR FOTO PERFIL</a>
+		<a style="display:none" id="visualizarFoto" class="link-offset-2 link-underline link-underline-opacity-0">VISUALIZAR FOTO PERFIL</a>
 	</div>
 
 	<br>
@@ -66,6 +66,7 @@
 </body>
 <script>
 	function ativarCampos() {
+		document.getElementById("visualizarFoto").href = "";
 
 		document.getElementById("floatingInput").disabled = true;
 
@@ -118,6 +119,7 @@
 	}
 
 	function buscarPorId() {
+		
 		fetch('api/clientes/' + document.getElementById("floatingInput").value)
 			.then((response) => {
 
@@ -165,7 +167,7 @@
 	}
 
 	function cadastrarCliente() {
-		const url = "api/clientes";
+		const url = "api/clientes/";
 		const requestOptions = {
 			method: "POST",
 			headers: {
@@ -184,12 +186,9 @@
 			}
 			)
 			.then((data) => {
-				alert("Cliente cadastrado com sucesso")
-
+				alert("Cliente cadastrado com sucesso");
 				document.getElementById("floatingInput").value = data.id;
-				document.getElementById("floatingNome").value = data.nome;
-				document.getElementById("floatingCpf").value = data.cpf;
-				document.getElementById("floatingImage").value = data.imagem;
+				buscarPorId();
 			});
 
 	}

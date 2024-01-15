@@ -111,7 +111,7 @@
 				} else {
 					document.getElementById("btnTelaAlterarCadastro").style.display = "inline";
 					document.getElementById("btnTelaDeletar").style.display = "inline";
-					document.getElementById("btnAlterarImagem").style.display = "inline";
+					//document.getElementById("btnAlterarImagem").style.display = "inline";
 					return response.json();
 				}
 			})
@@ -143,7 +143,7 @@
 
 		document.getElementById("floatingPreco").disabled = false;
 
-		document.getElementById("lblh1").textContent = "Cadastrar Cliente";
+		document.getElementById("lblh1").textContent = "Cadastrar Produto";
 
 		document.getElementById("btnEnviarCadastro").style.display = "inline";
 
@@ -254,9 +254,9 @@
 
 		document.getElementById("lblh1").textContent = "Alterar Imagem Produto";
 
-		document.getElementById("floatingImage").style.display = "inline";
+		//document.getElementById("floatingImage").style.display = "inline";
 
-		document.getElementById("lblImage").style.display = "inline";
+		//document.getElementById("lblImage").style.display = "inline";
 
 	}
 
@@ -287,8 +287,9 @@
 
 		// Itera sobre a lista de botões e define o estilo display para "none"
 		for (var i = 0; i < buttons.length; i++) {
-			buttons[i].style.display = "none";
-		}
+			if (buttons[i].textContent != 'home' && buttons[i].textContent != 'clientes' && buttons[i].textContent != 'produtos')
+				buttons[i].style.display = "none";
+		}	
 	}
 
 </script>
