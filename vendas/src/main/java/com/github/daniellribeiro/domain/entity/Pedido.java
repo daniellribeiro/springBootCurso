@@ -3,10 +3,11 @@ package com.github.daniellribeiro.domain.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+
+import com.github.daniellribeiro.enuns.StatusPedido;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,6 +40,9 @@ public class Pedido {
 	
 	@Column(precision = 20, scale = 2)
 	private BigDecimal total;
+	
+	@Enumerated(EnumType.STRING)
+	private StatusPedido status;
 	
 	@OneToMany(mappedBy = "pedido")
 	private List<ItemPedido> itens;
@@ -71,6 +77,14 @@ public class Pedido {
 
 	public void setTotal(BigDecimal total) {
 		this.total = total;
+	}
+	
+	public StatusPedido getStatus() {
+		return this.status;
+	}
+	
+	public void setStatus(StatusPedido status) {
+		this.status = status;
 	}
 
 	public List<ItemPedido> getItens() {

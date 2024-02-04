@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +57,7 @@ public class RestControllerPedido {
 		retorno.setCpf(pedido.getCliente().getCpf());
 		retorno.setNomeCliente(pedido.getCliente().getNome());
 		retorno.setTotal(pedido.getTotal());
+		retorno.setStatus(pedido.getStatus().name());
 		retorno.setItens(converterItens(pedido.getItens()));
 		
 		return retorno;
@@ -78,5 +80,12 @@ public class RestControllerPedido {
 		}
 		
 		return retorno;
+	}
+	
+	@PatchMapping("/cancelar/{id}")
+	public ConsultaPedidoDTO cancelarPedido(@PathVariable("id") Integer id) {
+		pedidos.cancelarPedido(id);
+		
+		return getById(id);
 	}
 }

@@ -17,6 +17,7 @@ public class ConsultaPedidoDTO {
 	private String cpf;
 	private String nomeCliente;
 	private BigDecimal total;
+	private String status;
 	private List<ConsultaItemPedidoDTO> itens;
 	private String dataPedido;
 	
@@ -50,6 +51,15 @@ public class ConsultaPedidoDTO {
 	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
+	
+	public String getStatus() {
+		return this.status;
+	}
+	
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	public List<ConsultaItemPedidoDTO> getItens() {
 		return itens;
 	}

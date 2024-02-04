@@ -16,6 +16,7 @@ import com.github.daniellribeiro.domain.repository.Clientes;
 import com.github.daniellribeiro.domain.repository.ItensPedido;
 import com.github.daniellribeiro.domain.repository.Pedidos;
 import com.github.daniellribeiro.domain.repository.Produtos;
+import com.github.daniellribeiro.enuns.StatusPedido;
 import com.github.daniellribeiro.exception.RegraNegocioException;
 import com.github.daniellribeiro.rest.dto.ItemPedidoDTO;
 import com.github.daniellribeiro.rest.dto.PedidoDTO;
@@ -44,6 +45,7 @@ public class PedidoServiceImpl implements PedidoService {
 		Pedido pedido = new Pedido();
 		pedido.setTotal(dto.getTotal());
 		pedido.setDataPedido(LocalDate.now());
+		pedido.setStatus(StatusPedido.REALIZADO);
 		
 		Cliente cliente = clientes.findById(dto.getCliente()).orElseThrow(() -> new RegraNegocioException("Codigo de cliente invalido"));
 		pedido.setCliente(cliente);
@@ -78,5 +80,10 @@ public class PedidoServiceImpl implements PedidoService {
 	@Override
 	public Optional<Pedido> consultarPedido(Integer id) {
 		return pedidos.findById(id);
+	}
+
+	@Override
+	public void cancelarPedido(Integer id) {
+		pedidos.cancelarPedido(id);
 	}
 }
