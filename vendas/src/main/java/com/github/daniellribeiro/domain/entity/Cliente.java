@@ -7,12 +7,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 @Entity
+@SequenceGenerator(name = "s_cliente", sequenceName = "s_cliente", allocationSize = 1)
 public class Cliente {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "s_cliente")
 	private Integer id;
 	
 	private String nome;

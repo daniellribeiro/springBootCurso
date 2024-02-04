@@ -2,6 +2,7 @@ package com.github.daniellribeiro.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -72,5 +73,10 @@ public class PedidoServiceImpl implements PedidoService {
 				return itemPedido;
 			}).collect(Collectors.toList());
 		}
+	}
+
+	@Override
+	public Optional<Pedido> consultarPedido(Integer id) {
+		return pedidos.findById(id);
 	}
 }
