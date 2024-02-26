@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @SequenceGenerator(name = "s_produto", sequenceName = "s_produto", allocationSize = 1)
@@ -15,8 +17,10 @@ public class Produto {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "s_produto")
 	private Integer id;
 	
+	@NotEmpty(message = "Campo Descricao e obrigatorio")
 	private String descricao;
 	
+	@NotNull(message = "Campo Preco e obrigatorio")
 	private BigDecimal preco;
 	
 	private String imagem;

@@ -183,15 +183,14 @@
 		fetch(url, requestOptions)
 			.then((response) => {
 				return response.json();
-			}
-			)
+			})
 			.then((data) => {
 				alert("Cliente cadastrado com sucesso");
-				document.getElementById("floatingInput").value = data.id;
+				document.getElementById("floatingInput").value = data.id
 				buscarPorId();
 			});
-
 	}
+			
 	function alterarCliente() {
 		if (document.getElementById("floatingInput").value === "") {
 			alert("Favor digitar o id do cliente que sera alterado");

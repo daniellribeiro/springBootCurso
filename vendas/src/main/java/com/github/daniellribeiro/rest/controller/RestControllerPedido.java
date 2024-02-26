@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +38,7 @@ public class RestControllerPedido {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Integer save(@RequestBody PedidoDTO dto) {
+	public Integer save(@RequestBody @Valid PedidoDTO dto) {
 		Pedido pedido = pedidos.salvar(dto);
 		return pedido.getId();
 	}

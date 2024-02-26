@@ -4,8 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +25,7 @@ import com.github.daniellribeiro.domain.entity.Cliente;
 import com.github.daniellribeiro.domain.repository.Clientes;
 
 @RestController
+@Validated
 @RequestMapping("/api/clientes/")
 public class RestControllerCliente {
 	private Clientes clientes;
@@ -34,7 +40,7 @@ public class RestControllerCliente {
 		if (cliente.isPresent())
 			return cliente.get();
 
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente nao encontrado");
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado");
 	}
 
 	@GetMapping(value = "nome/{nome}")
@@ -42,7 +48,7 @@ public class RestControllerCliente {
 		List<Cliente> listaClientes = clientes.encontrarPorNome(nome);
 
 		if (listaClientes.size() > 1) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Realizar a consulta pelo id");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Realizar a consulta pelo id");
 		}
 
 		Optional<Cliente> cliente = Optional.ofNullable(listaClientes.get(0));
@@ -50,23 +56,30 @@ public class RestControllerCliente {
 		if (cliente.isPresent())
 			return cliente.get();
 
-		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Cliente nao encontrado");
+		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente nao encontrado");
 	}
 
 	@PostMapping
-	public Cliente salvarCliente(@RequestBody Map<String, String> requestBody) {
+	public ResponseEntity salvarCliente(@Valid @RequestBody Map<String, String> requestBody) {
+
 		String nome = requestBody.get("nome");
 		String cpf = requestBody.get("cpf");
 		String imagem = requestBody.get("imagem");
-		
+
 		Cliente cliente = new Cliente(nome);
-		
+
 		cliente.setCpf(cpf);
-		
+
 		cliente.setImagem(imagem);
-		
-		Cliente clienteSalvo = clientes.save(cliente);
-		return clienteSalvo;
+
+		try {
+			Cliente clienteSalvo = clientes.save(cliente);
+			return ResponseEntity.ok(clienteSalvo);
+		} catch (Exception ex) {
+			String mensagem = validarMensagem(nome, cpf);
+			return ResponseEntity.badRequest().body(mensagem);
+		}
+
 	}
 
 	@DeleteMapping(value = "{id}")
@@ -79,14 +92,28 @@ public class RestControllerCliente {
 		String nome = requestBody.get("nome");
 		String cpf = requestBody.get("cpf");
 		String imagem = requestBody.get("imagem");
-		
-		Cliente cliente = new Cliente(id,nome);
-		
+
+		Cliente cliente = new Cliente(id, nome);
+
 		cliente.setCpf(cpf);
-		
+
 		cliente.setImagem(imagem);
-		
+
 		Cliente clienteSalvo = clientes.save(cliente);
 		return clienteSalvo;
+	}
+
+	private String validarMensagem(String nome, String cpf) {
+		String mensagem = " Erro: Campos Invalidos";
+
+		if (nome.isEmpty()) {
+			mensagem = mensagem + " Erro: Nome nao pode ser vazio";
+		}
+
+		if (cpf.isEmpty()) {
+			mensagem = mensagem + " Erro: Cpf nao pode ser vazio";
+		}
+
+		return mensagem;
 	}
 }

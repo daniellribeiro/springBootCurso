@@ -8,6 +8,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @SequenceGenerator(name = "s_cliente", sequenceName = "s_cliente", allocationSize = 1)
@@ -17,10 +20,13 @@ public class Cliente {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "s_cliente")
 	private Integer id;
 	
+	@NotEmpty(message = "Campo nome e obrigatorio")
 	private String nome;
 	
 	private String imagem;
 	
+	@NotEmpty(message = "Campo cpf e obrigatorio")
+	@CPF(message = "Informe um cpf valido")
 	private String cpf;
 	
 	@OneToMany(mappedBy = "cliente")
