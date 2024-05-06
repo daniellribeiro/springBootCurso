@@ -25,10 +25,10 @@ public class Usuario {
 	
 	private String login;
 	
-	@NotEmpty(message = "{campo.login.obrigatorio")
+	@NotEmpty(message = "{campo.login.obrigatorio}")
 	private String senha;
 
-	@NotEmpty(message = "{campo.senha.obrigatorio")
+	@NotEmpty(message = "{campo.senha.obrigatorio}")
 	public String getLogin() {
 		return login;
 	}
